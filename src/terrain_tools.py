@@ -119,7 +119,9 @@ class Gaussian:
     bands: list[str] = field(
         default_factory=lambda: ["Elevation", "Slope", "GaussianCurvature"]
     )
-    func: Callable = field(default=gaussian_filter())  # TODO need to check paramaters
+    filter_func: Callable = field(
+        default=gaussian_filter()
+    )  # TODO need to check paramaters
 
 
 @dataclass
@@ -134,7 +136,7 @@ class PeronaMalik:
             "MeanCurvature",
         ]
     )
-    func: Callable = field(default=perona_malik())
+    filter_func: Callable = field(default=perona_malik())
 
 
 def compute_terrain_products(data: Gaussian | PeronaMalik) -> ee.Image:
