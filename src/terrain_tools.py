@@ -144,6 +144,7 @@ def compute_terrain_products(data: Gaussian | PeronaMalik) -> ee.Image:
     run the ta 2 times and combine the results into a single image at the end
     """
     # build a rectangle around the dataset
+    geom = data.geom
     if isinstance(geom, ee.FeatureCollection):
         geom = geom.geometry()
     else:
