@@ -168,6 +168,6 @@ def compute_terrain_products(data: Gaussian | PeronaMalik) -> ee.Image:
     dataset = data.dataset
     dataset = data.filter_func(dataset)
     dataset = tagee.terrainAnalysis(
-        dem=dataset.select(data.elevation_band), geom=rectangle
+        dem=dataset.select(data.elevation_band), bbox=rectangle
     ).select(data.bands)
     return dataset
