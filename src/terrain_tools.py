@@ -3,7 +3,7 @@ import ee
 import tagee
 
 from dataclasses import dataclass, field
-from typing import Callable
+from typing import Callable, Any
 
 # NOTE: DO NOT ATTEMPT TO TEST (I.E. ATTEMPT TO TAKE THIS OUT SIDE OF OF API) THIS FILE,
 # IT IS NOT VERY TESTABLE, WE WILL HAVE TO ASSUME THAT THE
@@ -115,7 +115,7 @@ def perona_malik(K=3.5, iterations=10, method=2) -> Callable:
 class Gaussian:
     dataset: ee.Image
     geom: ee.Geometry
-    elevation_band: str = field(default="elevation")
+    elevation_band: Any = field(default="elevation")
     bands: list[str] = field(
         default_factory=lambda: ["Elevation", "Slope", "GaussianCurvature"]
     )
@@ -128,7 +128,7 @@ class Gaussian:
 class PeronaMalik:
     dataset: ee.Image
     geom: ee.Geometry
-    elevation_band: str = field(default="elevation")
+    elevation_band: Any = field(default="elevation")
     bands: list[str] = field(
         default_factory=lambda: [
             "HorizontalCurvature",
