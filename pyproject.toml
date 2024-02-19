@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "terrain_tools"
+authors = [{ name = "Ryan Hamilton", email = "ryan.hamilton@ec.gc.ca" }]
+description = "My package description"
+requires-python = ">=3.11"
+dependencies = ["earthengine-api", "tagee"]
+version = "0.1.6"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
