@@ -1,4 +1,3 @@
-import click
 import ee
 import tagee
 
@@ -171,3 +170,33 @@ def compute_terrain_products(data: Gaussian | PeronaMalik) -> ee.Image:
         dem=dataset.select(data.elevation_band), bbox=rectangle
     ).select(data.bands)
     return dataset
+
+
+def compute_cnwi_terrain_variables(dataset: ee.Image, geom: ee.Geometry) -> ee.Image:
+    """ computes cnwi terrain variables"""
+    
+    dataset = dataset.select('elevation')
+    
+    coords = geom.bounds().coordinates()
+
+    listCoords = ee.Array.cat(coords, 1)
+    xCoords = listCoords.slice(1, 0, 1)
+    yCoords = listCoords.slice(1, 1, 2)
+
+    xMin = xCoords.reduce("min", [0]).get([0, 0])
+    xMax = xCoords.reduce("max", [0]).get([0, 0])
+    yMin = yCoords.reduce("min", [0]).get([0, 0])
+    yMax = yCoords.reduce("max", [0]).get([0, 0])
+
+    rectangle = ee.Geometry.Rectangle(xMin, yMin, xMax, yMax)
+
+    gausaian = dataset.convolve(ee.Kernel.gaussian(radius=3, sigma=2, units='Pixels', normalize=True, magnitude=1.0))
+    
+    gausain_products = tagee.terrainAnalysis(dem=gausaian, bbox=rectangle).select(["Elevation", "Slope", "GaussianCurvature"])
+    
+    perona_malik = perona_malik()(dataset)
+    perona_malik_products = tagee.terrainAnalysis(dem=perona_malik, bbox=rectangle).select(["HorizontalCurvature",
+            "VerticalCurvature",
+            "MeanCurvature"])
+    
+    return gausain_products.addBands(perona_malik)
